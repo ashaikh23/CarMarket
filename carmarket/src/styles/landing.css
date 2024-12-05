@@ -1,0 +1,86 @@
+/* Landing page styles
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: #ecf0f1;
+  }
+  
+  .hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero button {
+    margin: 10px;
+    padding: 15px 25px;
+    font-size: 18px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .hero button:hover {
+    background: #2ecc71;
+  }
+   */
+   .hero {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .header {
+    background-color: #282c34;
+    padding: 10px;
+    color: white;
+  }
+  
+  .nav-link {
+    margin-left: 10px;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .nav-link:hover {
+    text-decoration: underline;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .footer {
+    margin-top: 20px;
+    color: #777;
+    font-size: 14px;
+  }
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+    
