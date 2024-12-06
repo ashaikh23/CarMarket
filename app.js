@@ -15,6 +15,7 @@ connectDB();
 app.use('/api/auth', require('./server/routes/auth')); // Authentication routes
 app.use('/api/listings', require('./server/routes/listings')); // Listings routes
 app.use('/api/messages', require('./server/routes/messages'));
+app.use('/api/car', require('./server/routes/cars'))
 
 
 // Default Route
