@@ -101,9 +101,12 @@ function LandingPage() {
           <Link to="/sell">
             <button className="btn-primary">Start Selling</button>
           </Link>
-          <button className="btn-secondary" onClick={handleBuyClick}>
+          <Link to="/buy">
+            <button className="btn-primary">Buy Cars</button>
+          </Link>
+          {/* <button className="btn-secondary" onClick={handleBuyClick}>
             Buy Cars
-          </button>
+          </button> */}
         </div>
       </main>
       <footer className="footer">
