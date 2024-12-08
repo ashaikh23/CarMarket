@@ -49,6 +49,61 @@ router.get('/viewlisting/:postingID', authenticate, async (req, res) => {
     }
 });
 
-  
+//must test trying to delete someone elses post
+router.delete('/deletelisting/:postingID', authenticate, async (req, res) => {
+    const { postingID } = req.params;
+    let listing
+    try {
+        listing = await Car.findById(postingID);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+    if (listing != null && listing.postedBy == req.user.id){
+        try {
+            const listing = await Car.findByIdAndDelete(postingID);
+            res.status(200).json("listing has been delete");
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+    else {
+        res.status(200).json("listing does not exist or is not yours") //need to seperate
+    }
+});
+
+//get all posting by a certain user
+router.get('/userlistings', authenticate, async (req, res) => {
+    try {
+        // Fetch listings posted by the authenticated user
+        const listings = await Car.find({ postedBy: req.user.id });
+
+        if (listings.length === 0) {
+            return res.status(404).json({ message: 'No listings found for this user.' });
+        }
+
+        res.status(200).json(listings);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/sellerlistings/:sellerID', authenticate, async (req, res) => {
+    const { sellerID } = req.params;
+
+    try {
+        // Fetch listings posted by the authenticated user
+        const listings = await Car.find({ postedBy: sellerID });
+
+        if (listings.length === 0) {
+            return res.status(404).json({ message: 'No listings found for this user.' });
+        }
+
+        res.status(200).json(listings);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 
 module.exports = router;
