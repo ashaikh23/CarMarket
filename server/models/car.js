@@ -1,23 +1,4 @@
-// const mongoose = require('mongoose');
-
-// const carSchema = new mongoose.Schema({
-//     make: String,
-//     model: String,
-//     year: Number,
-//     price: Number,
-// });
-
-// const Car = mongoose.model('Car', carSchema);
-// module.exports = Car;
-
-// const carSchema = new mongoose.Schema({
-//     make: String,
-//     model: String,
-//     year: Number,
-//     price: Number,
-//     email: String, 
-//     description: String,
-// });
+const mongoose = require('mongoose');
 
 const carSchema = new mongoose.Schema({
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -29,7 +10,6 @@ const carSchema = new mongoose.Schema({
     condition: {type: String, required: true},
     timestamp: { type: Date, default: Date.now },
 });
-
 
 const Car = mongoose.model('Car', carSchema);
 module.exports = Car;
