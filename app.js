@@ -15,15 +15,21 @@ connectDB();
 app.use('/api/auth', require('./server/routes/auth')); // Authentication routes
 app.use('/api/listings', require('./server/routes/listings')); // Listings routes
 app.use('/api/messages', require('./server/routes/messages'));
-
+app.use('/api/car', require('./server/routes/cars'))
+app.use('/api/ratings', require('./server/routes/ratings'))
 
 // Default Route
 app.get('/', (req, res) => {
     res.send('Car Marketplace API is running!');
 });
 
+const cors = require("cors");
+
+app.use(cors()); // Enable CORS for all requests
+app.use(express.json()); // Enable JSON body parsing
+
 // Start Server
-const PORT = 3000;
+const PORT = 5001;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
