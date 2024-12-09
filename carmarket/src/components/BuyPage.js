@@ -27,7 +27,7 @@ const BuyPage = () => {
   return (
     <div className="buy-page">
       <header className="header">
-        <h1>Buy Cars</h1>
+        <h1>Buy Your Perfect Car</h1>
         <nav>
           <Link to="/" className="nav-link">Back to Home</Link>
         </nav>
