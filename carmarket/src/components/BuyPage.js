@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./../styles/buy.css";
+import { Link } from "react-router-dom";
 
 const BuyCars = () => {
   const [search, setSearch] = useState("");
@@ -35,6 +36,9 @@ const BuyCars = () => {
     <div className="buy-cars-page">
       <header className="header">
         <h1>Buy Your Perfect Car</h1>
+        <nav>
+          <Link to="/" className="nav-link">Back to Home</Link>
+        </nav>
       </header>
 
       <div className="search-bar">
