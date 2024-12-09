@@ -23,8 +23,13 @@ app.get('/', (req, res) => {
     res.send('Car Marketplace API is running!');
 });
 
+const cors = require("cors");
+
+app.use(cors()); // Enable CORS for all requests
+app.use(express.json()); // Enable JSON body parsing
+
 // Start Server
-const PORT = 3000;
+const PORT = 5001;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
