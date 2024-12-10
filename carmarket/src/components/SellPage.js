@@ -31,7 +31,7 @@ function SellPage() {
       if (response.ok) {
         alert(`Car listed: ${formData.carName}`);
       } else {
-        alert("car listed");
+        alert("Failed to list car");
       }
     } catch (error) {
       console.error("Error listing car:", error);
@@ -42,12 +42,17 @@ function SellPage() {
   return (
     <div className="sell-page">
       <header className="header">
-        <h1>Sell Your Car</h1>
-        <nav>
-          <Link to="/" className="nav-link">Back to Home</Link>
-        </nav>
+        <div className="header-content">
+          <h1 className="logo">CarMarket</h1>
+          <nav className="nav-bar">
+            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/buy" className="nav-link">Buy Cars</Link>
+            <Link to="/sell" className="nav-link highlight">Sell Your Car</Link>
+          </nav>
+        </div>
       </header>
       <main>
+        <h2 className="page-title">Sell Your Car</h2>
         <form className="sell-form" onSubmit={handleSubmit}>
           <label htmlFor="carName">Car Name:</label>
           <input
@@ -101,6 +106,9 @@ function SellPage() {
           <button type="submit" className="btn-primary">List Your Car</button>
         </form>
       </main>
+      <footer className="footer">
+        <p>© 2024 CarMarket. All Rights Reserved.</p>
+      </footer>
     </div>
   );
 }

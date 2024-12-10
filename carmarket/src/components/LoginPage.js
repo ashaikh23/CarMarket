@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  Alert,
+  Link,
+} from '@mui/material';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -11,7 +20,6 @@ function LoginPage() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       // Send login request to backend
       const response = await axios.post('/api/auth/login', { email, password });
@@ -27,29 +35,106 @@ function LoginPage() {
   };
 
   return (
-    <div className="login-page">
-      <h2>Login</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
+    <Box
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f5f5f5',
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 4,
+          width: 400,
+          textAlign: 'center',
+          backgroundColor: '#ffffff',
+          borderRadius: '16px', // Rounded corners for Paper
+        }}
+      >
+        <Typography variant="h5" fontWeight="bold" mb={2}>
+          Login
+        </Typography>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2, borderRadius: '8px' }}>
+            {error}
+          </Alert>
+        )}
+        <Box component="form" onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            label="Email"
+            name="email"
             type="email"
+            margin="normal"
+            variant="outlined"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
+          <TextField
+            fullWidth
+            label="Password"
+            name="password"
             type="password"
+            margin="normal"
+            variant="outlined"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'start', // Align left with fields
+              mt: 2,
+            }}
+          >
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                borderRadius: '4px', // Slightly rounded corners
+                backgroundColor: '#000',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: '#333',
+                },
+              }}
+            >
+              Login
+            </Button>
+            <Typography
+              variant="body2"
+              sx={{
+                ml: 2,
+                fontWeight: 'bold',
+                color: '#000',
+              }}
+            >
+              Need to create an account?{' '}
+              <Link
+                component={RouterLink}
+                to="/signup"
+                underline="hover"
+                sx={{
+                  fontWeight: 'bold',
+                  color: '#000',
+                  '&:hover': {
+                    color: '#555',
+                  },
+                }}
+              >
+                Sign Up
+              </Link>
+            </Typography>
+          </Box>
+        </Box>
+      </Paper>
+    </Box>
   );
 }
 
