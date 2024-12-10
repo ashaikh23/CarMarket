@@ -10,7 +10,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 
 function MessagingPage() {
   const navigate = useNavigate();
