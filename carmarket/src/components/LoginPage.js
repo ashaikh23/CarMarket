@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   TextField,
@@ -117,7 +117,8 @@ function LoginPage() {
             >
               Need to create an account?{' '}
               <Link
-                href="#"
+                component={RouterLink}
+                to="/signup"
                 underline="hover"
                 sx={{
                   fontWeight: 'bold',
@@ -127,7 +128,7 @@ function LoginPage() {
                   },
                 }}
               >
-                Sign up
+                Sign Up
               </Link>
             </Typography>
           </Box>
