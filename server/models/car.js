@@ -20,14 +20,12 @@
 // });
 
 const carSchema = new mongoose.Schema({
-    postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    make: {type: String, required: true},
-    model: {type: String, required: true},
-    year: {type: Number, required: true},
-    price: {type: Number, required: true},
-    miles: {type: Number, required: true},
-    condition: {type: String, required: true},
-    timestamp: { type: Date, default: Date.now },
+    make: { type: String, required: true },
+    model: { type: String, required: true },
+    price: { type: Number, required: true },
+    description: { type: String, required: true },
+    email: { type: String, required: true },
+    image: { type: String, default: null },  // Image is optional, default is null
 });
 
 
