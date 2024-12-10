@@ -32,7 +32,7 @@ function LandingPage() {
         </div>
       </main>
       <footer className="footer">
-        <p>&copy; 2024 CarMarket. All Rights Reserved.</p>
+        <p>&copy; 2024 CarMarket. Made with ❤️ in Amherst, MA. All Rights Reserved.</p>
       </footer>
     </div>
   );
