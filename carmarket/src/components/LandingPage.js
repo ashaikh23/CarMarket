@@ -6,29 +6,33 @@ function LandingPage() {
   return (
     <div className="hero">
       <header className="header">
-        <h1>CarMarket</h1>
-        <nav>
-          <Link to="/sell" className="nav-link">Sell Your Car</Link>
-          <Link to="/login" className="nav-link">Login</Link>
-          <Link to="/logout" className="nav-link">Logout</Link>
-          <Link to="/signup" className="nav-link">Sign Up</Link>
-          <Link to="/messaging" className="nav-link">Messaging</Link>
-        </nav>
+        <div className="header-content">
+          <h1 className="logo">CarMarket</h1>
+          <nav className="nav-bar">
+            <Link to="/sell" className="nav-link">Sell Your Car</Link>
+            <Link to="/buy" className="nav-link">Buy Cars</Link>
+            <Link to="/messaging" className="nav-link">Messaging</Link>
+            <Link to="/logout" className="nav-link">Logout</Link>
+            <Link to="/login" className="nav-link highlight">Login/Sign Up</Link>
+          </nav>
+        </div>
       </header>
-      <main>
-        <h2>Find Your Perfectsss Car</h2>
-        <p>Browse and buy cars from sellers around the world.</p>
-        <div className="button-group">
-          <Link to="/sell">
-            <button className="btn-primary">Start Selling</button>
-          </Link>
-          <Link to="/buy">
-            <button className="btn-primary">Buy Cars</button>
-          </Link>
+      <main className="main-content">
+        <div className="content">
+          <h2 className="main-title">Find Your Perfect Car</h2>
+          <p className="main-subtitle">Browse and buy cars from sellers around the US.</p>
+          <div className="button-group">
+            <Link to="/sell">
+              <button className="btn-primary">Start Selling</button>
+            </Link>
+            <Link to="/buy">
+              <button className="btn-primary">Buy Cars</button>
+            </Link>
+          </div>
         </div>
       </main>
       <footer className="footer">
-        <p>&copy; 2024 CarMarket. All Rights Reserved.</p>
+        <p>&copy; 2024 CarMarket. Made with ❤️ in Amherst, MA. All Rights Reserved.</p>
       </footer>
     </div>
   );
