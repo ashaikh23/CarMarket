@@ -1,4 +1,53 @@
-
+/* Selling page styles
+.sell-form {
+    max-width: 600px;
+    margin: 40px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sell-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .sell-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+  }
+  
+  .sell-form input,
+  .sell-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .sell-form textarea {
+    resize: vertical;
+  }
+  
+  .sell-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .sell-form button:hover {
+    background: #2ecc71;
+  }
+   */
 
    .sell-page {
     text-align: center;
