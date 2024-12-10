@@ -9,9 +9,10 @@ function LandingPage() {
         <h1>CarMarket</h1>
         <nav>
           <Link to="/sell" className="nav-link">Sell Your Car</Link>
+          <Link to="/buy" className="nav-link">Buy Cars</Link>
+          <Link to="/messaging" className="nav-link">Messaging</Link>
           <Link to="/login" className="nav-link">Login</Link>
           <Link to="/signup" className="nav-link">Sign Up</Link>
-          <Link to="/messaging" className="nav-link">Messaging</Link>
         </nav>
       </header>
       <main>
