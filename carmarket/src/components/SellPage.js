@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   TextField,
@@ -19,7 +19,7 @@ function SellYourCar() {
     condition: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage] = useState('');
 
   // Retrieve the token from localStorage
   const token = localStorage.getItem('token');
@@ -80,7 +80,7 @@ function SellYourCar() {
         Sell Your Car
       </Typography>
       <Button
-        onClick={() => navigate('/')}
+        onClick={() => navigate('/landing')}
         sx={{
           textTransform: 'none',
           color: '#007bff',

@@ -13,7 +13,7 @@ function LandingPage() {
             <Link to="/buy" className="nav-link">Buy Cars</Link>
             <Link to="/messaging" className="nav-link">Messaging</Link>
             <Link to="/logout" className="nav-link">Logout</Link>
-            <Link to="/login" className="nav-link highlight">Login/Sign Up</Link>
+            {/* <Link to="/login" className="nav-link highlight">Login/Sign Up</Link> */}
           </nav>
         </div>
       </header>
