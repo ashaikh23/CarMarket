@@ -3,7 +3,7 @@ const Message = require('../models/car'); // Import Message model
 const User = require('../models/user'); // Import User model
 const authenticate = require('../middleware/authMiddleware'); // Import authentication middleware
 const mongoose = require('mongoose');
-const Car = require('../models/car');
+const Cars = require('../models/car');
 
 const router = express.Router()
 
@@ -12,7 +12,7 @@ router.post('/postlisting', authenticate, async (req, res)=>{
 
     try {
         // Create and save the message
-        const car = new Car({
+        const car = new Cars({
             postedBy: req.user.id, // Current user (sender),
             make: make,
             model: model,
@@ -31,7 +31,7 @@ router.post('/postlisting', authenticate, async (req, res)=>{
 
 router.get('/getcars', authenticate, async (req, res)=>{
     try {
-        const cars = await Car.find()
+        const cars = await Cars.find()
             .sort({ timestamp: 1 }) // Sort by timestamp (oldest to newest)
         res.status(200).json(cars);
     } catch (err) {
@@ -42,7 +42,7 @@ router.get('/getcars', authenticate, async (req, res)=>{
 router.get('/viewlisting/:postingID', authenticate, async (req, res) => {
     const { postingID } = req.params;
     try {
-        const listing = await Car.findById(postingID);
+        const listing = await Cars.findById(postingID);
         res.status(200).json(listing);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -54,13 +54,13 @@ router.delete('/deletelisting/:postingID', authenticate, async (req, res) => {
     const { postingID } = req.params;
     let listing
     try {
-        listing = await Car.findById(postingID);
+        listing = await Cars.findById(postingID);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
     if (listing != null && listing.postedBy == req.user.id){
         try {
-            const listing = await Car.findByIdAndDelete(postingID);
+            const listing = await Cars.findByIdAndDelete(postingID);
             res.status(200).json("listing has been delete");
         } catch (err) {
             res.status(500).json({ error: err.message });
@@ -75,7 +75,7 @@ router.delete('/deletelisting/:postingID', authenticate, async (req, res) => {
 router.get('/userlistings', authenticate, async (req, res) => {
     try {
         // Fetch listings posted by the authenticated user
-        const listings = await Car.find({ postedBy: req.user.id });
+        const listings = await Cars.find({ postedBy: req.user.id });
 
         if (listings.length === 0) {
             return res.status(404).json({ message: 'No listings found for this user.' });
@@ -92,7 +92,7 @@ router.get('/sellerlistings/:sellerID', authenticate, async (req, res) => {
 
     try {
         // Fetch listings posted by the authenticated user
-        const listings = await Car.find({ postedBy: sellerID });
+        const listings = await Cars.find({ postedBy: sellerID });
 
         if (listings.length === 0) {
             return res.status(404).json({ message: 'No listings found for this user.' });

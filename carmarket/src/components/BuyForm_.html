@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Data Form</title>
+</head>
+<body>
+    <h1>Car Details Form</h1>
+    <form action="/submit-car-data" method="POST">
+        <!-- Car Make -->
+        <label for="make">Make:</label>
+        <input type="text" id="make" name="make" required>
+        <br><br>
+        
+        <!-- Car Model -->
+        <label for="model">Model:</label>
+        <input type="text" id="model" name="model" required>
+        <br><br>
+        
+        <!-- Car Year -->
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" min="1886" max="2024" required>
+        <br><br>
+        
+        <!-- Car Price -->
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+        <br><br>
+        
+        <!-- Car Miles -->
+        <label for="miles">Miles:</label>
+        <input type="number" id="miles" name="miles" required>
+        <br><br>
+        
+        <!-- Car Condition -->
+        <label for="condition">Condition:</label>
+        <input type="text" id="condition" name="condition" required>
+        <br><br>
+        
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
