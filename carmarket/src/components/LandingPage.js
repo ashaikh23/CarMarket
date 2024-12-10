@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import "../styles/landing.css";
 
 function LandingPage() {
+  const handleBuyClick = () => {
+    alert("Coming Soon!");
+  };
+
   return (
     <div className="hero">
       <header className="header">
@@ -23,6 +27,9 @@ function LandingPage() {
           <Link to="/buy">
             <button className="btn-primary">Buy Cars</button>
           </Link>
+          {/* <button className="btn-secondary" onClick={handleBuyClick}>
+            Buy Cars
+          </button> */}
         </div>
       </main>
       <footer className="footer">

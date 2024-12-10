@@ -5,9 +5,9 @@ const BuyCars = () => {
   const [search, setSearch] = useState("");
 
   const cars = [
-    { id: 1, name: "Toyota Corolla", price: "$20,000", image: "https://imageio.forbes.com/blogs-images/danroth/files/2017/12/2018-toyota-corolla-se_01-1200x798.jpg?format=jpg&height=900&width=1600&fit=bounds", description: "2018, low mileage", email: "adeeb.s120@gmail.com" },
-    { id: 2, name: "Honda Civic", price: "$18,000", image: "https://www.cnet.com/a/img/resize/5ad5ba0e3b30db7b737df5b99ef6096791fd133f/hub/2019/05/20/206ebe75-ceca-4a48-85f9-0ee77584d676/2019-honda-civic-touring-sedan-ogi-1.jpg?auto=webp&fit=crop&height=675&width=1200", description: "2019, excellent condition", email: "adeeb.s120@gmail.com" },
-    { id: 3, name: "Ford Mustang", price: "$30,000", image: null, description: "2020, sporty", email: "adeeb.s120@gmail.com" },
+    { id: 1, name: "Toyota Corolla", price: "$20,000", image: "https://imageio.forbes.com/blogs-images/danroth/files/2017/12/2018-toyota-corolla-se_01-1200x798.jpg?format=jpg&height=900&width=1600&fit=bounds", description: "2018, low mileage" },
+    { id: 2, name: "Honda Civic", price: "$18,000", image: "https://www.cnet.com/a/img/resize/5ad5ba0e3b30db7b737df5b99ef6096791fd133f/hub/2019/05/20/206ebe75-ceca-4a48-85f9-0ee77584d676/2019-honda-civic-touring-sedan-ogi-1.jpg?auto=webp&fit=crop&height=675&width=1200", description: "2019, excellent condition" },
+    { id: 3, name: "Ford Mustang", price: "$30,000", image: "https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2019/08/1200/675/shel1.jpg?ve=1&tl=1", description: "2020, sporty" },
   ];
 
   // default car link when no image is uploaded

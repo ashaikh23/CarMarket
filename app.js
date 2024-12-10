@@ -118,7 +118,7 @@
 // module.exports = router;
 
 const express = require('express');
-const connectDB = require('./server/db');
+const connectDB = require('./server/db'); // Import database connection
 const dotenv = require('dotenv');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
@@ -129,9 +129,7 @@ dotenv.config();
 
 const app = express();
 
-// Middleware to parse JSON and enable CORS
-app.use(express.json());
-app.use(cors());
+app.use(express.json()); // Middleware to parse JSON
 
 // Connect to MongoDB
 connectDB();
@@ -139,6 +137,8 @@ connectDB();
 // Routes
 app.use('/api/auth', require('./server/routes/auth'));
 app.use('/api/listings', require('./server/routes/listings'));
+app.use('/api/auth', require('./server/routes/auth')); // Authentication routes
+app.use('/api/listings', require('./server/routes/listings')); // Listings routes
 app.use('/api/messages', require('./server/routes/messages'));
 
 // Email route
@@ -203,9 +203,23 @@ app.post("/api/cars", async (req, res) => {
 });
 
 module.exports = router;
+app.use('/api/car', require('./server/routes/cars'))
+app.use('/api/ratings', require('./server/routes/ratings'))
+
+// Default Route
+app.get('/', (req, res) => {
+    res.send('Car Marketplace API is running!');
+});
+
+// Start Server
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
 
 // Start Server
 const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });

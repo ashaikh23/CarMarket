@@ -8,7 +8,6 @@ function SellPage() {
     price: "",
     description: "",
     contactInfo: "",
-    email: "",
   });
 
   const handleChange = (e) => {
@@ -37,6 +36,8 @@ function SellPage() {
       console.error("Error listing car:", error);
       alert("Failed to list car");
     }
+    alert(`Car listed: ${formData.carName}`);
+    // Here, you'd typically send the data to the backend
   };
 
   return (
@@ -78,7 +79,7 @@ function SellPage() {
             required
           ></textarea>
 
-          <label htmlFor="contactInfo">Contact Info (Phone/Other):</label>
+          <label htmlFor="contactInfo">Contact Info:</label>
           <input
             type="text"
             id="contactInfo"
@@ -101,8 +102,12 @@ function SellPage() {
           <button type="submit" className="btn-primary">List Your Car</button>
         </form>
       </main>
+      <footer className="footer">
+        <p>&copy; 2024 CarMarket. All Rights Reserved.</p>
+      </footer>
     </div>
   );
 }
 
 export default SellPage;
+
