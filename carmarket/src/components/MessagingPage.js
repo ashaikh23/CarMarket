@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode'; // Corrected import
 import {
   Box,
   TextField,
@@ -9,16 +10,35 @@ import {
   ListItemText,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function MessagingPage() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userName, setUserName] = useState('');
 
   // Simulated authentication check
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Replace with your auth check
-    setIsAuthenticated(!!token); // If token exists, user is authenticated
-  }, []);
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+      try {
+        const decodedToken = jwtDecode(token); // Corrected usage
+        setUserName(decodedToken.id || 'User'); // Assuming the token contains the user's name
+        //console.log('Decoded JWT Token:', token);
+        if (decodedToken.exp * 1000 < Date.now()) {
+          localStorage.removeItem('token'); // Remove expired token
+          navigate('/login');
+        }
+      } catch (err) {
+        console.error('Invalid token:', err);
+        localStorage.removeItem('token');
+        navigate('/login');
+      }
+    } else {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   // State for conversations
   const [conversations, setConversations] = useState({
@@ -65,7 +85,7 @@ function MessagingPage() {
         <Typography variant="h6" sx={{ marginBottom: 2 }}>
           You need to{' '}
           <Button
-            onClick={() => navigate('/signin')}
+            onClick={() => navigate('/login')}
             sx={{
               textTransform: 'none',
               padding: '0',
@@ -170,7 +190,7 @@ function MessagingPage() {
           }}
         >
           <Typography variant="h6" fontWeight="bold">
-            Chat with {currentSeller}
+            {userName}'s Messaging Page
           </Typography>
           <Button
             onClick={() => navigate('/')}

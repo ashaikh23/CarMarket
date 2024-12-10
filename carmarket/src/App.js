@@ -4,6 +4,7 @@ import LandingPage from "./components/LandingPage";
 import SellPage from "./components/SellPage";
 import BuyPage from "./components/BuyPage";
 import LoginPage from "./components/LoginPage";
+import LogOutPage from "./components/LogOutPage";
 import SignUpPage from "./components/SignUpPage"; // Import SignUpPage
 import MessagingPage from "./components/MessagingPage";
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/sell" element={<SellPage />} />
         <Route path="/buy" element={<BuyPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/logout" element={<LogOutPage />} />
         <Route path="/signup" element={<SignUpPage />} /> {/* Add SignUpPage */}
         <Route path="/messaging" element={<MessagingPage />} /> {/* Add SignUpPage */}
       </Routes>

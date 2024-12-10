@@ -1,7 +1,7 @@
 const express = require('express');
-const Message = require('../models/message'); // Import Message model
-const User = require('../models/user'); // Import User model
-const authenticate = require('../middleware/authMiddleware'); // Import authentication middleware
+const Message = require('../models/message');
+const User = require('../models/user');
+const authenticate = require('../middleware/authMiddleware');
 const mongoose = require('mongoose');
 
 const router = express.Router();
@@ -17,9 +17,14 @@ router.post('/send', authenticate, async (req, res) => {
             return res.status(404).json({ error: 'Receiver not found' });
         }
 
+        // Validate the content
+        if (!content || content.trim() === '') {
+            return res.status(400).json({ error: 'Message content cannot be empty' });
+        }
+
         // Create and save the message
         const message = new Message({
-            sender: req.user.id, // Current user (sender)
+            sender: req.user.id,
             receiver: receiverId,
             content,
         });
@@ -31,9 +36,10 @@ router.post('/send', authenticate, async (req, res) => {
     }
 });
 
-// Route to retrieve messages between two users
+// Route to retrieve messages between two users (with pagination)
 router.get('/history/:userId', authenticate, async (req, res) => {
     const { userId } = req.params;
+    const { page = 1, limit = 20 } = req.query;
 
     try {
         // Retrieve messages between the current user and the other user
@@ -43,9 +49,11 @@ router.get('/history/:userId', authenticate, async (req, res) => {
                 { sender: userId, receiver: req.user.id },
             ],
         })
-            .sort({ timestamp: 1 }) // Sort by timestamp (oldest to newest)
-            .populate('sender', 'username') // Populate sender details
-            .populate('receiver', 'username'); // Populate receiver details
+            .sort({ timestamp: 1 })
+            .populate('sender', 'username')
+            .populate('receiver', 'username')
+            .skip((page - 1) * limit) // Pagination
+            .limit(parseInt(limit));
 
         res.status(200).json(messages);
     } catch (err) {
@@ -56,13 +64,12 @@ router.get('/history/:userId', authenticate, async (req, res) => {
 // Get a list of all users the current user has a conversation with
 router.get('/conversations', authenticate, async (req, res) => {
     try {
-        // FIX: Use 'new' keyword for ObjectId if required (older versions of Mongoose need this)
         const userId = new mongoose.Types.ObjectId(req.user.id);
 
         // Find all messages where the user is either the sender or the receiver
         const messages = await Message.find({
             $or: [{ sender: userId }, { receiver: userId }]
-        }).select('sender receiver -_id'); // Select only sender and receiver fields
+        }).select('sender receiver -_id');
 
         // Extract unique user IDs involved in conversations
         const userIds = new Set();

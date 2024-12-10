@@ -10,6 +10,7 @@ function LandingPage() {
         <nav>
           <Link to="/sell" className="nav-link">Sell Your Car</Link>
           <Link to="/login" className="nav-link">Login</Link>
+          <Link to="/logout" className="nav-link">Logout</Link>
           <Link to="/signup" className="nav-link">Sign Up</Link>
           <Link to="/messaging" className="nav-link">Messaging</Link>
         </nav>
