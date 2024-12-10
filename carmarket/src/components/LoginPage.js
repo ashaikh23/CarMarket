@@ -28,7 +28,7 @@ function LoginPage() {
       localStorage.setItem('token', response.data.token);
 
       // Navigate to the landing page or dashboard
-      navigate('/'); // Redirect to the landing page
+      navigate('/landing'); // Redirect to the landing page
     } catch (err) {
       setError(err.response?.data?.error || 'Invalid credentials');
     }
