@@ -20,6 +20,7 @@ connectDB();
 // Routes
 app.use('/api/auth', require('./server/routes/auth'));
 app.use('/api/listings', require('./server/routes/listings'));
+app.use('/api/cars', require('./server/routes/cars'));
 app.use('/api/messages', require('./server/routes/messages'));
 
 // Email route
