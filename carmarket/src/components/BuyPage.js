@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./../styles/buy.css";
 
-
 const BuyCars = () => {
   const [search, setSearch] = useState("");
 //   const cars = [
