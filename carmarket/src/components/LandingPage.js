@@ -11,10 +11,11 @@ function LandingPage() {
           <Link to="/sell" className="nav-link">Sell Your Car</Link>
           <Link to="/login" className="nav-link">Login</Link>
           <Link to="/signup" className="nav-link">Sign Up</Link>
+          <Link to="/messaging" className="nav-link">Messaging</Link>
         </nav>
       </header>
       <main>
-        <h2>Find Your Perfect Car</h2>
+        <h2>Find Your Perfectsss Car</h2>
         <p>Browse and buy cars from sellers around the world.</p>
         <div className="button-group">
           <Link to="/sell">

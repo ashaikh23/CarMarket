@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
 
 // Define schema for messages
 const messageSchema = new mongoose.Schema({
