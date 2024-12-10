@@ -9,14 +9,15 @@ function LandingPage() {
         <h1>CarMarket</h1>
         <nav>
           <Link to="/sell" className="nav-link">Sell Your Car</Link>
-          <Link to="/login" className="nav-link">Login</Link>
-          <Link to="/logout" className="nav-link">Logout</Link>
-          <Link to="/signup" className="nav-link">Sign Up</Link>
+          <Link to="/buy" className="nav-link">Buy Cars</Link>
           <Link to="/messaging" className="nav-link">Messaging</Link>
+          <Link to="/logout" className="nav-link">Logout</Link>
+          <Link to="/login" className="nav-link">Login</Link>
+          <Link to="/signup" className="nav-link">Sign Up</Link>
         </nav>
       </header>
       <main>
-        <h2>Find Your Perfectsss Car</h2>
+        <h2>Find Your Perfect Car</h2>
         <p>Browse and buy cars from sellers around the world.</p>
         <div className="button-group">
           <Link to="/sell">
