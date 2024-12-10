@@ -86,17 +86,4 @@ router.get('/conversations', authenticate, async (req, res) => {
     }
 });
 
-
-
-router.get('/retrieveByID/:userID', authenticate, async (req, res) => {
-    const { userID } = req.params;
-    try {
-        const user = await User.findById(userID);
-        res.status(200).json(user);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-
 module.exports = router;
