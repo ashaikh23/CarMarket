@@ -134,7 +134,7 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-/* Footer
+/* Footer */
 .sell-form.footer {
   margin-top: auto;
   background-color: #333;
@@ -143,4 +143,4 @@ body {
   text-align: center;
   position: sticky;
   bottom: 0;
-} */
+}
