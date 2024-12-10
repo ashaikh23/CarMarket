@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode'; // Corrected import
+import { jwtDecode } from 'jwt-decode';
 import {
   Box,
   TextField,
@@ -15,19 +15,32 @@ import { useNavigate } from 'react-router-dom';
 function MessagingPage() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [conversations, setConversations] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [userName, setUserName] = useState('');
+  const [currentSeller, setCurrentSeller] = useState(null);
+  const [input, setInput] = useState('');
 
-  // Simulated authentication check
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
       try {
-        const decodedToken = jwtDecode(token); // Corrected usage
-        setUserName(decodedToken.id || 'User'); // Assuming the token contains the user's name
-        //console.log('Decoded JWT Token:', token);
+        const decodedToken = jwtDecode(token);
+        const userID = decodedToken.id;
+        axios
+          .get(`http://localhost:3000/api/messages/retrieveByID/${userID}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            setUserName(response.data.username);
+          })
+          .catch((error) => {
+            console.error('Error fetching user information:', error);
+          });
+
         if (decodedToken.exp * 1000 < Date.now()) {
-          localStorage.removeItem('token'); // Remove expired token
+          localStorage.removeItem('token');
           navigate('/login');
         }
       } catch (err) {
@@ -40,35 +53,87 @@ function MessagingPage() {
     }
   }, [navigate]);
 
-  // State for conversations
-  const [conversations, setConversations] = useState({
-    seller1: [
-      { id: 1, text: "Hi, is the car still available?", sender: "self" },
-      { id: 2, text: "Yes, it's available.", sender: "other" },
-    ],
-    seller2: [
-      { id: 1, text: "Can you tell me more about the laptop?", sender: "self" },
-      { id: 2, text: "Sure, it's in great condition!", sender: "other" },
-    ],
-  });
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        if (decodedToken.exp * 1000 < Date.now()) {
+          localStorage.removeItem('token');
+          navigate('/login');
+          return;
+        }
 
-  const [currentSeller, setCurrentSeller] = useState('seller1');
-  const [input, setInput] = useState('');
+        setIsAuthenticated(true);
+
+        axios
+          .get(`http://localhost:3000/api/messages/conversations`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            setConversations(response.data);
+            if (response.data.length > 0) {
+              setCurrentSeller(response.data[0]._id);
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching conversations:', error);
+          });
+      } catch (err) {
+        console.error('Invalid token:', err);
+        localStorage.removeItem('token');
+        navigate('/login');
+      }
+    } else {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (currentSeller) {
+      const token = localStorage.getItem('token');
+      axios
+        .get(`http://localhost:3000/api/messages/history/${currentSeller}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          setMessages(response.data);
+        })
+        .catch((error) => {
+          console.error('Error fetching messages:', error);
+        });
+    }
+  }, [currentSeller]);
 
   const handleSendMessage = () => {
+    const token = localStorage.getItem('token');
+    const userID = jwtDecode(token).id;
+
     if (input.trim()) {
-      setConversations((prev) => ({
-        ...prev,
-        [currentSeller]: [
-          ...prev[currentSeller],
-          { id: prev[currentSeller].length + 1, text: input, sender: "self" },
-        ],
-      }));
-      setInput('');
+      axios
+        .post(
+          `http://localhost:3000/api/messages/send`,
+          {
+            receiverId: currentSeller,
+            content: input,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          setMessages((prev) => [
+            ...prev,
+            { ...response.data.data, sender: userID },
+          ]);
+          setInput('');
+        })
+        .catch((error) => {
+          console.error('Error sending message:', error);
+        });
     }
   };
 
-  // If not authenticated, display a message
   if (!isAuthenticated) {
     return (
       <Box
@@ -128,7 +193,6 @@ function MessagingPage() {
         backgroundColor: '#f5f5f5',
       }}
     >
-      {/* Sidebar for Conversations */}
       <Box
         sx={{
           width: '25%',
@@ -148,29 +212,31 @@ function MessagingPage() {
         >
           Conversations
         </Typography>
-        {Object.keys(conversations).map((seller) => (
+        {conversations.map((conversation) => (
           <ListItem
-            key={seller}
+            key={conversation._id}
             button
-            onClick={() => setCurrentSeller(seller)}
+            onClick={() => setCurrentSeller(conversation._id)}
             sx={{
               padding: 2,
               cursor: 'pointer',
-              backgroundColor: currentSeller === seller ? '#f0f0f0' : '#ffffff',
+              backgroundColor:
+                currentSeller === conversation._id ? '#f0f0f0' : '#ffffff',
               '&:hover': {
                 backgroundColor: '#f9f9f9',
               },
             }}
           >
             <ListItemText
-              primary={`Chat with ${seller}`}
-              sx={{ fontWeight: currentSeller === seller ? 'bold' : 'normal' }}
+              primary={`Chat with ${conversation.username}`}
+              sx={{
+                fontWeight: currentSeller === conversation._id ? 'bold' : 'normal',
+              }}
             />
           </ListItem>
         ))}
       </Box>
 
-      {/* Chat Window */}
       <Box
         sx={{
           flex: 1,
@@ -178,7 +244,6 @@ function MessagingPage() {
           flexDirection: 'column',
         }}
       >
-        {/* Header */}
         <Box
           sx={{
             padding: 2,
@@ -205,7 +270,6 @@ function MessagingPage() {
           </Button>
         </Box>
 
-        {/* Messages List */}
         <Box
           sx={{
             flex: 1,
@@ -215,31 +279,36 @@ function MessagingPage() {
           }}
         >
           <List>
-            {conversations[currentSeller].map((message) => (
-              <ListItem
-                key={message.id}
-                sx={{
-                  justifyContent: message.sender === 'self' ? 'flex-end' : 'flex-start',
-                  marginBottom: '8px',
-                }}
-              >
-                <Box
+            {messages.map((message) => {
+              const isCurrentUser =
+                message.sender === jwtDecode(localStorage.getItem('token')).id;
+              return (
+                <ListItem
+                  key={message._id}
                   sx={{
-                    padding: 1.5,
-                    borderRadius: '12px',
-                    backgroundColor: message.sender === 'self' ? '#000000' : '#e5e5e5',
-                    color: message.sender === 'self' ? '#ffffff' : '#000000',
-                    maxWidth: '70%',
+                    justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
+                    marginBottom: '8px',
                   }}
                 >
-                  <ListItemText primary={message.text} />
-                </Box>
-              </ListItem>
-            ))}
+                  <Box
+                    sx={{
+                      padding: 1.5,
+                      borderRadius: '12px',
+                      backgroundColor: isCurrentUser
+                        ? '#000000'
+                        : '#e5e5e5',
+                      color: isCurrentUser ? '#ffffff' : '#000000',
+                      maxWidth: '70%',
+                    }}
+                  >
+                    <ListItemText primary={message.content} />
+                  </Box>
+                </ListItem>
+              );
+            })}
           </List>
         </Box>
 
-        {/* Input Area */}
         <Box
           sx={{
             display: 'flex',

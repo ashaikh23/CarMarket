@@ -5,9 +5,6 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const router = express.Router();
 const multer = require("multer");
-const authRoutes = require('./routes/auth'); // Adjust the path as necessary
-const messageRoutes = require('./routes/messages');
-const userRoutes = require('./routes/users'); // Path to user route file
 
 dotenv.config();
 
@@ -15,9 +12,6 @@ const app = express();
 
 // Middleware to parse JSON and enable CORS
 app.use(express.json());
-app.use('/api/auth', authRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/users', userRoutes);
 app.use(cors());
 
 // Connect to MongoDB

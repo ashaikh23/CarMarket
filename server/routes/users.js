@@ -5,13 +5,15 @@ const router = express.Router();
 
 // Fetch user details by ID
 router.get('/:id', authenticate, async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).send('User not found');
-    res.send({ name: user.name });
-  } catch (err) {
-    res.status(500).send('Server error');
-  }
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        res.json({ username: user.username });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
+
 module.exports = router;
+
