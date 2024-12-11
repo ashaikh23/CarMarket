@@ -1,40 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { TextField } from "@mui/material";
 import "./../styles/buy.css";
 
 const BuyCars = () => {
   const [search, setSearch] = useState("");
   const [cars, setCars] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const defaultCarImage = "https://jamaicaautoauctions.com/wp-content/uploads/2019/11/default-car.jpg";
 
-  useEffect(() => {
-    // Fetch cars from the backend
-    const fetchCars = async () => {
-      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
-      try {
-        const response = await fetch("http://localhost:3000/api/cars/getcars", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Add the token here
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch cars");
-        }
-        const data = await response.json();
-        setCars(data);
-      } catch (error) {
-        console.error("Error fetching cars:", error);
-        setErrorMessage("Failed to load cars. Please try again later.");
-      }
-    };
-    
-
-    fetchCars();
-  }, []);
-
-  const handleBuyNow = async (car) => {
+    const handleBuyNow = async (car) => {
     try {
       const response = await fetch("http://localhost:3001/send-email", {
         method: "POST",
@@ -51,6 +28,40 @@ const BuyCars = () => {
       alert("Failed to send email.");
     }
   };
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch("http://localhost:3000/api/cars/getcars", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch cars");
+        }
+        const data = await response.json();
+        setCars(data);
+      } catch (error) {
+        console.error("Error fetching cars:", error);
+        setErrorMessage("Failed to load cars. Please try again later.");
+      }
+    };
+
+    fetchCars();
+  }, []);
+
+  const filteredCars = cars.filter((car) => {
+    const matchesSearch =
+      car.make.toLowerCase().includes(search.toLowerCase()) ||
+      car.model.toLowerCase().includes(search.toLowerCase());
+    const matchesPrice =
+      (!minPrice || car.price >= parseFloat(minPrice)) &&
+      (!maxPrice || car.price <= parseFloat(maxPrice));
+    return matchesSearch && matchesPrice;
+  });
 
   return (
     <div className="buy-cars-page">
@@ -74,6 +85,25 @@ const BuyCars = () => {
         />
       </div>
 
+      <div className="price-filter">
+        <TextField
+          label="Min Price"
+          variant="outlined"
+          size="small"
+          value={minPrice}
+          onChange={(e) => setMinPrice(e.target.value)}
+          sx={{ width: 120 }}
+        />
+        <TextField
+          label="Max Price"
+          variant="outlined"
+          size="small"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+          sx={{ width: 120 }}
+        />
+      </div>
+
       {errorMessage && (
         <div className="error-message">
           <p>{errorMessage}</p>
@@ -81,15 +111,11 @@ const BuyCars = () => {
       )}
 
       <div className="car-grid">
-        {cars.length > 0 ? (
-          cars
-            .filter((car) =>
-              car.make.toLowerCase().includes(search.toLowerCase()) ||
-              car.model.toLowerCase().includes(search.toLowerCase())
-            )
-            .map((car) => (
-              <div key={car._id} className="car-card">
-                <img src={car.image || defaultCarImage} alt={car.make} />
+        {filteredCars.length > 0 ? (
+          filteredCars.map((car) => (
+            <div key={car._id} className="car-card">
+              <img src={car.image || defaultCarImage} alt={car.make} className="car-image" />
+              <div className="car-details">
                 <h3>{car.make} {car.model}</h3>
                 <p>{car.description || "No description available"}</p>
                 <h4>${car.price}</h4>
@@ -97,9 +123,10 @@ const BuyCars = () => {
                   Buy Now
                 </button>
               </div>
-            ))
+            </div>
+          ))
         ) : (
-          <p>Loading cars...</p>
+          <p>No cars match your filters.</p>
         )}
       </div>
 
