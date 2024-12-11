@@ -1,355 +1,103 @@
 import React, { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
-  TextField,
-  Button,
   Typography,
   List,
   ListItem,
   ListItemText,
+  CircularProgress,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
-function MessagingPage() {
+const MessagingPage = () => {
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [conversations, setConversations] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [userName, setUserName] = useState('');
-  const [currentSeller, setCurrentSeller] = useState(null);
-  const [input, setInput] = useState('');
+  const [chats, setChats] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  // Fetch all chats
+  const fetchChats = async () => {
     const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
-      try {
-        const decodedToken = jwtDecode(token);
-        const userID = decodedToken.id;
-        axios
-          .get(`http://localhost:3000/api/messages/retrieveByID/${userID}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((response) => {
-            setUserName(response.data.username);
-          })
-          .catch((error) => {
-            console.error('Error fetching user information:', error);
-          });
 
-        if (decodedToken.exp * 1000 < Date.now()) {
-          localStorage.removeItem('token');
-          navigate('/login');
-        }
-      } catch (err) {
-        console.error('Invalid token:', err);
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
-    } else {
+    if (!token) {
+      setErrorMessage('You are not authenticated. Please log in.');
+      setIsLoading(false);
       navigate('/login');
+      return;
     }
-  }, [navigate]);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        if (decodedToken.exp * 1000 < Date.now()) {
-          localStorage.removeItem('token');
-          navigate('/login');
-          return;
-        }
+    try {
+      const response = await fetch('http://localhost:3000/api/messages/listChats', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        setIsAuthenticated(true);
-
-        axios
-          .get(`http://localhost:3000/api/messages/conversations`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((response) => {
-            setConversations(response.data);
-            if (response.data.length > 0) {
-              setCurrentSeller(response.data[0]._id);
-            }
-          })
-          .catch((error) => {
-            console.error('Error fetching conversations:', error);
-          });
-      } catch (err) {
-        console.error('Invalid token:', err);
-        localStorage.removeItem('token');
-        navigate('/login');
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: Unable to fetch chats`);
       }
-    } else {
-      navigate('/login');
-    }
-  }, [navigate]);
 
-  useEffect(() => {
-    if (currentSeller) {
-      const token = localStorage.getItem('token');
-      axios
-        .get(`http://localhost:3000/api/messages/history/${currentSeller}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setMessages(response.data);
-        })
-        .catch((error) => {
-          console.error('Error fetching messages:', error);
-        });
-    }
-  }, [currentSeller]);
-
-  const handleSendMessage = () => {
-    const token = localStorage.getItem('token');
-    const userID = jwtDecode(token).id;
-
-    if (input.trim()) {
-      axios
-        .post(
-          `http://localhost:3000/api/messages/send`,
-          {
-            receiverId: currentSeller,
-            content: input,
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        .then((response) => {
-          setMessages((prev) => [
-            ...prev,
-            { ...response.data.data, sender: userID },
-          ]);
-          setInput('');
-        })
-        .catch((error) => {
-          console.error('Error sending message:', error);
-        });
+      const data = await response.json();
+      setChats(data); // Store the fetched chats in state
+    } catch (error) {
+      console.error('Error fetching chats:', error);
+      setErrorMessage('Failed to load chats. Please try again later.');
+    } finally {
+      setIsLoading(false); // Stop the loading spinner
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <Box
-        sx={{
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          backgroundColor: '#f5f5f5',
-        }}
-      >
-        <Typography variant="h6" sx={{ marginBottom: 2 }}>
-          You need to{' '}
-          <Button
-            onClick={() => navigate('/login')}
-            sx={{
-              textTransform: 'none',
-              padding: '0',
-              fontSize: 'inherit',
-              color: '#007bff',
-              '&:hover': {
-                textDecoration: 'underline',
-              },
-            }}
-          >
-            Sign In
-          </Button>{' '}
-          to access the Messaging Page.
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={() => navigate('/')}
-          sx={{
-            backgroundColor: '#000000',
-            color: '#ffffff',
-            borderRadius: '12px',
-            padding: '8px 16px',
-            textTransform: 'none',
-            '&:hover': {
-              backgroundColor: '#333333',
-            },
-          }}
-        >
-          Go to Home
-        </Button>
-      </Box>
-    );
-  }
+  // Fetch chats when the component mounts
+  useEffect(() => {
+    fetchChats();
+  }, []);
+
+  const handleChatClick = (chatId) => {
+    navigate(`/chat/${chatId}`);
+  };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        height: '100vh',
-        backgroundColor: '#f5f5f5',
-      }}
-    >
-      <Box
-        sx={{
-          width: '25%',
-          backgroundColor: '#ffffff',
-          borderRight: '1px solid #ddd',
-          overflowY: 'auto',
-        }}
-      >
-        <Typography
-          variant="h6"
-          sx={{
-            textAlign: 'center',
-            padding: 2,
-            fontWeight: 'bold',
-            borderBottom: '1px solid #ddd',
-          }}
-        >
-          Conversations
+    <Box sx={{ padding: '2rem' }}>
+      <Typography variant="h4" align="center" sx={{ marginBottom: '1rem' }}>
+        Your Chats
+      </Typography>
+
+      {isLoading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+          <CircularProgress />
+        </Box>
+      ) : errorMessage ? (
+        <Typography color="error" align="center">
+          {errorMessage}
         </Typography>
-        {conversations.map((conversation) => (
-          <ListItem
-            key={conversation._id}
-            button
-            onClick={() => setCurrentSeller(conversation._id)}
-            sx={{
-              padding: 2,
-              cursor: 'pointer',
-              backgroundColor:
-                currentSeller === conversation._id ? '#f0f0f0' : '#ffffff',
-              '&:hover': {
-                backgroundColor: '#f9f9f9',
-              },
-            }}
-          >
-            <ListItemText
-              primary={`Chat with ${conversation.username}`}
+      ) : chats.length > 0 ? (
+        <List>
+          {chats.map((chat) => (
+            <ListItem
+              key={chat._id}
+              button
+              onClick={() => handleChatClick(chat._id)} // Navigate to a specific chat
               sx={{
-                fontWeight: currentSeller === conversation._id ? 'bold' : 'normal',
+                borderBottom: '1px solid #ddd',
+                padding: '1rem',
+                '&:hover': { backgroundColor: '#f5f5f5' },
               }}
-            />
-          </ListItem>
-        ))}
-      </Box>
-
-      <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <Box
-          sx={{
-            padding: 2,
-            backgroundColor: '#ffffff',
-            borderBottom: '1px solid #ddd',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="h6" fontWeight="bold">
-            {userName}'s Messaging Page
-          </Typography>
-          <Button
-            onClick={() => navigate('/')}
-            variant="outlined"
-            sx={{
-              textTransform: 'none',
-              borderRadius: '12px',
-              padding: '4px 12px',
-            }}
-          >
-            Home
-          </Button>
-        </Box>
-
-        <Box
-          sx={{
-            flex: 1,
-            padding: 2,
-            overflowY: 'auto',
-            backgroundColor: '#f9f9f9',
-          }}
-        >
-          <List>
-            {messages.map((message) => {
-              const isCurrentUser =
-                message.sender === jwtDecode(localStorage.getItem('token')).id;
-              return (
-                <ListItem
-                  key={message._id}
-                  sx={{
-                    justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
-                    marginBottom: '8px',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      padding: 1.5,
-                      borderRadius: '12px',
-                      backgroundColor: isCurrentUser
-                        ? '#000000'
-                        : '#e5e5e5',
-                      color: isCurrentUser ? '#ffffff' : '#000000',
-                      maxWidth: '70%',
-                    }}
-                  >
-                    <ListItemText primary={message.content} />
-                  </Box>
-                </ListItem>
-              );
-            })}
-          </List>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: 2,
-            borderTop: '1px solid #ddd',
-            backgroundColor: '#ffffff',
-          }}
-        >
-          <TextField
-            fullWidth
-            placeholder="Type your message..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            sx={{
-              marginRight: 2,
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '12px',
-              },
-            }}
-          />
-          <Button
-            variant="contained"
-            onClick={handleSendMessage}
-            sx={{
-              backgroundColor: '#000000',
-              color: '#ffffff',
-              borderRadius: '12px',
-              padding: '8px 16px',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#333333',
-              },
-            }}
-          >
-            Send
-          </Button>
-        </Box>
-      </Box>
+            >
+              <ListItemText
+                primary={`Chat with ${chat.participants
+                  .map((p) => p.username)
+                  .join(', ')}`}
+                secondary={chat.lastMessage || 'No messages yet'}
+              />
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Typography align="center">No chats found. Start a conversation!</Typography>
+      )}
     </Box>
   );
-}
+};
 
 export default MessagingPage;

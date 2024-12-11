@@ -3,8 +3,45 @@ const Message = require('../models/message'); // Import Message model
 const User = require('../models/user'); // Import User model
 const authenticate = require('../middleware/authMiddleware'); // Import authentication middleware
 const mongoose = require('mongoose');
+const listOfChats = require('../models/listOfChats');
+const listOfMessages = require('../models/listOfMessages');
+const Chat = require('../models/chat'); // Import Chat model
+
 
 const router = express.Router();
+
+// Route to list all chats
+// Route to list all chats for the authenticated user
+router.get('/api/messages/listChats', authenticate, async (req, res) => {
+    try {
+        const userId = req.user.id; // Authenticated user
+        const chats = await Chat.find({ participants: userId })
+            .populate('participants', 'username email') // Populate participant info
+            .sort({ updatedAt: -1 }); // Sort by most recent update
+
+        res.status(200).json(chats); // Send chat data
+    } catch (error) {
+        console.error('Error listing chats:', error);
+        res.status(500).json({ error: 'Failed to fetch chats' });
+    }
+});
+
+// Route to list all messages for a given chat
+router.get('/listMessages/:chatId', authenticate, async (req, res) => {
+    const { chatId } = req.params;
+
+    try {
+        const messages = await Message.find({ chatId })
+            .sort({ timestamp: 1 }) // Sort messages by timestamp (oldest to newest)
+            .populate('sender', 'username email') // Populate sender details
+            .populate('receiver', 'username email'); // Populate receiver details
+
+        res.status(200).json(messages); // Send message data
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+        res.status(500).json({ error: 'Failed to fetch messages' });
+    }
+});
 
 // Route to send a message
 router.post('/send', authenticate, async (req, res) => {
