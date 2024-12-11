@@ -43,8 +43,10 @@ A modern web application for buying and selling cars, built with Node.js, Expres
 
 ## Demo
 
-[\[Video Link\]](https://docs.google.com/presentation/d/1ldgNKpmf21U2AadLi0X_2iO4OqcrkyvaSQ0gs17Z6KE/edit#slide=id.g31d7fa6a2cd_0_40)
-[\[Slides\]](https://docs.google.com/presentation/d/1ldgNKpmf21U2AadLi0X_2iO4OqcrkyvaSQ0gs17Z6KE/edit#slide=id.g31d7fa6a2cd_0_40)
+Video:
+Slides: https://docs.google.com/presentation/d/1ldgNKpmf21U2AadLi0X_2iO4OqcrkyvaSQ0gs17Z6KE/edit#slide=id.g31d7fa6a2cd_0_40
+
+
 
 ---
 
