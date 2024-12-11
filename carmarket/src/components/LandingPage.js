@@ -31,7 +31,7 @@ function LandingPage() {
           </div>
         </div>
       </main>
-      <footer className="footer">
+      <footer className="bottom-footer">
         <p>&copy; 2024 CarMarket. Made with ❤️ in Amherst, MA. All Rights Reserved.</p>
       </footer>
     </div>
