@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
-import SellPage from "./components/SellPage";
+// import SellPage from "./components/SellPage";
 import BuyPage from "./components/BuyPage";
 import LoginPage from "./components/LoginPage";
 import LogOutPage from "./components/LogOutPage";
@@ -13,7 +13,6 @@ function App() {
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <Routes>
-
         <Route path="/sell" element={<CarForm />} />
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/landing" element={<LandingPage />} />

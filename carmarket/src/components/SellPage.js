@@ -43,8 +43,8 @@ function SellYourCar() {
         console.log('Using token:', token);
 
         const response = await axios.post(
-            'http://localhost:3000/api/car/postlisting',
-            carDetails,
+          '/api/cars/postlisting',
+          carDetails,
             {
                 headers: { Authorization: `Bearer ${token}` },
             }

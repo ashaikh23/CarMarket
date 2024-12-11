@@ -88,6 +88,7 @@ app.post('/send-email', async (req, res) => {
 // Routes for additional functionalities
 app.use('/api/auth', require('./server/routes/auth'));
 app.use('/api/listings', require('./server/routes/listings'));
+app.use('/api/cars', require('./server/routes/cars'));
 app.use('/api/messages', require('./server/routes/messages'));
 
 // Handle POST request for car listings without image
