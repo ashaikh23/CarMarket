@@ -58,7 +58,7 @@ const BuyCars = () => {
         <div className="header-content">
           <h1 className="logo">CarMarket</h1>
           <nav className="nav-bar">
-            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/landing" className="nav-link">Home</Link>
             <Link to="/sell" className="nav-link">Sell Your Car</Link>
             <Link to="/buy" className="nav-link highlight">Buy Cars</Link>
           </nav>

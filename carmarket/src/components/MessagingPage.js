@@ -167,7 +167,7 @@ function MessagingPage() {
         </Typography>
         <Button
           variant="contained"
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/landing')}
           sx={{
             backgroundColor: '#000000',
             color: '#ffffff',
@@ -258,7 +258,7 @@ function MessagingPage() {
             {userName}'s Messaging Page
           </Typography>
           <Button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/landing')}
             variant="outlined"
             sx={{
               textTransform: 'none',
